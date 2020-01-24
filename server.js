@@ -31,7 +31,7 @@ mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser : true});
 // GET route to scrape articles
 app.get("/scrape", (req, res) => {
     // Getting the body from the html
-    axios.get("https://www.theguardian.com/uk/technology").then(response => {
+    axios.get("https://www.theguardian.com/uk/technology/all").then(response => {
         // Setting a $ shortcut for loading with cheerio    
         var $ = cheerio.load(response.data);
         // Grabbing every li element to retrieve news
