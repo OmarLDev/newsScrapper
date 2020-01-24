@@ -26,7 +26,8 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //Connecting to the MongoDB
-mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser : true});
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+mongoose.connect(MONGODB_URI, { useNewUrlParser : true});
 
 // GET route to scrape articles
 app.get("/scrape", (req, res) => {
