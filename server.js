@@ -29,14 +29,13 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser : true});
 
 // GET route to scrape articles
-app.get("/srape", (req, res) => {
+app.get("/scrape", (req, res) => {
     // Getting the body from the html
     axios.get("https://www.theguardian.com/uk/technology").then(response => {
         // Setting a $ shortcut for loading with cheerio    
         var $ = cheerio.load(response.data);
-
         // Grabbing every li element to retrieve news
-        $("li").each((i, element) => {
+        $("section div").each(function(i, element)  {
             // Empty object to store results
             var result = {};
             
@@ -47,18 +46,18 @@ app.get("/srape", (req, res) => {
             result.link = $(this)
                 .children("a")
                 .attr("href");
-
-            // Creating a new article using the previously defined object
-            // db.Article.create(result)
-            //     .then((dbArticle) => {
-            //         // review added result in the console
-            //         console.log(dbArticle);
-            //     })
-            //     .catch((err) =>{
-            //         // if error, log it
-            //         console.log(err);
-            //     });
-            console.log(result);
+            if(typeof result.link !== "undefined"){
+                // Creating a new article using the previously defined object
+                db.Article.create(result)
+                .then((dbArticle) => {
+                    // review added result in the console
+                    console.log(dbArticle);
+                })
+                .catch((err) =>{
+                    // if error, log it
+                    console.log(err);
+                });
+            }
         });
 
         res.send("Scraping completed");
