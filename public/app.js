@@ -2,7 +2,7 @@
 $.getJSON("/articles",data => {
     for (let index = 0; index < data.length; index++) {
         // Creating a card for each article to show
-        $("#articles").append(`<div class="card" data-id="${data[index]._id}" data-toggle="modal" data-target="#exampleModal">
+        $("#articles").append(`<div class="card" data-id="${data[index]._id}" data-toggle="modal" data-target="#commentsModal">
                                     <div class="card-body">
                                         <h5 class="card-title">${data[index].title}</h5>
                                         <p class="card-text">
