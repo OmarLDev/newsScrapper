@@ -17,7 +17,7 @@ var ArticleSchema = new Schema({
     },
     // Setting an array to store multiple comments
     comments: [{
-        type:Schema.Types.ObjectId, 
+        type: Schema.Types.ObjectId, 
         ref: "Comment"
     }]
 });

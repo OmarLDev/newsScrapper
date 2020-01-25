@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //Connecting to the MongoDB
-let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
 mongoose.connect(MONGODB_URI, { useNewUrlParser : true});
 
 // GET route to scrape articles
@@ -76,12 +76,12 @@ app.get("/articles", (req, res) => {
     });
 });
 
-// GET to retrieve an specific artticle
+// GET to retrieve an specific article
 app.get("/articles/:id", (req, res) =>{
     // Converting id to a mongo object
     db.Article.findOne({_id : mongoose.Types.ObjectId(req.params.id)})
     // populating all comments related to this article
-    .populate("comment")
+    .populate("comments")
     .then((data) => {
         res.json(data);
     })
@@ -95,7 +95,7 @@ app.post("/articles/:id", (req, res) => {
     // Creating a new Comment
     db.Comment.create(req.body)
     .then((dbComment) => {
-        return db.Comment.findOneAndUpdate({"_id": req.params.id}, {comment: dbNote._id}, {new: true});
+        return db.Article.findOneAndUpdate({"_id": req.params.id}, {$push: {comments: dbComment._id}}, {new: true});
     })
     .then((dbArticle) => {
         res.json(dbArticle);
